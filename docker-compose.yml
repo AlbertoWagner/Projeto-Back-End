@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  web:
+    build: ../Projeto-Back-End
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+       - .:/code
+    ports:
+      - "8000:8000"
+    stdin_open: true
+    tty: true
+  client:
+    build: ../../projeto_front_end
+    volumes:
+      - ../../projeto_front_end:/app
+      - ../../app/node_modules
+    ports:
+      - '3000:3000'
+    stdin_open: true
+    tty: true
+    environment:
+      - NODE_ENV=development
+      - REACT_APP_PROXY=http://localhost:3000
+    depends_on:
+      - "web"
+    command: npm start -- --port 3000
+
+
